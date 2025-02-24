@@ -14,15 +14,23 @@ type DataFrame2D struct {
 	Data [][]float64
 }
 
-func (this *DataFrame2D) dot(matrixB *DataFrame2D) (*DataFrame2D, error) {
+func (this *DataFrame2D) prettyPrint() {
+	for i := range this.Data {
+		fmt.Println(this.Data[i])
+	}
+}
+
+func (this *DataFrame2D) dot(that *DataFrame2D) (*DataFrame2D, error) {
 	if this.Data == nil {
 		return nil, errors.New("Empty data frame")
 	}
-	if len(this.Data[0]) != len(matrixB.Data) {
+	if len(this.Data[0]) != len(that.Data) {
 		return nil, errors.New("Matrix dimensions are not compatible")
 	}
+
 	m := len(this.Data)
-	q := len(matrixB.Data[0])
+	q := len(that.Data[0])
+	cols := len(this.Data[0])
 
 	resultData := make([][]float64, m)
 
@@ -31,9 +39,15 @@ func (this *DataFrame2D) dot(matrixB *DataFrame2D) (*DataFrame2D, error) {
 	}
 
 	for i := range m {
-
 		for j := range q {
-
+			row := make([]float64, cols)
+			copy(row, this.Data[i])
+			product := 0.0
+			for k := range cols {
+				row[k] *= that.Data[k][j]
+				product += row[k]
+			}
+			resultData[i][j] = product
 		}
 	}
 
@@ -185,5 +199,4 @@ func main() {
 	fmt.Println("W2 Shape: ", W2.shape())
 	fmt.Println("B2 Shape: ", B2.shape())
 	fmt.Println("---------")
-
 }
