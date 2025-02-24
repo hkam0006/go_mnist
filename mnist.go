@@ -31,6 +31,7 @@ func (this *DataFrame2D) dot(matrixB *DataFrame2D) (*DataFrame2D, error) {
 	}
 
 	for i := range m {
+
 		for j := range q {
 
 		}
