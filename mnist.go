@@ -10,6 +10,23 @@ import (
 	"strconv"
 )
 
+type ActivationFunction interface {
+	Pass([][]float64) [][]float64
+}
+
+type ReLu struct{}
+
+func (this ReLu) Pass(arr [][]float64) [][]float64 {
+	output := make([][]float64, len(arr))
+	for i := range len(arr) {
+		output[i] = make([]float64, len(arr[0]))
+		for j := range len(arr[0]) {
+			output[i][j] = max(arr[i][j], 0.0)
+		}
+	}
+	return output
+}
+
 type DataFrame2D struct {
 	Data [][]float64
 }
@@ -199,4 +216,6 @@ func main() {
 	fmt.Println("W2 Shape: ", W2.shape())
 	fmt.Println("B2 Shape: ", B2.shape())
 	fmt.Println("---------")
+
+	// activation_f := ReLu{}
 }
